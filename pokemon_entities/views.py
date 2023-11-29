@@ -2,7 +2,7 @@ import folium
 import json
 
 from django.http import HttpResponseNotFound
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
 from pokemon_entities.models import Pokemon, PokemonEntity
 
@@ -55,12 +55,30 @@ def show_pokemon(request, pokemon_id):
     pokemon_entity = PokemonEntity.objects.get(pokemon=pokemon)
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
     image_url = request.build_absolute_uri(pokemon_entity.pokemon.image.url)
+    pokemon_data = {
+        'lat': pokemon_entity.lat,
+        'lon': pokemon_entity.lon,
+        'img_url': image_url,
+        'title_ru': pokemon.title,
+        'description': pokemon.description
+    }
     add_pokemon(
-        folium_map, pokemon_entity.lat,
-        pokemon_entity.lon,
-        image_url
+        folium_map, pokemon_data['lat'],
+        pokemon_data['lon'],
+        pokemon_data['img_url']
     )
 
     return render(request, 'pokemon.html', context={
-        'map': folium_map._repr_html_(), 'pokemon': pokemon
+        'map': folium_map._repr_html_(), 'pokemon': pokemon_data
     })
+
+
+# pokemon = Pokemon.objects.get(id=pokemon_id)
+#     pokemon_entity = PokemonEntity.objects.get(pokemon=pokemon)
+#     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
+#     image_url = request.build_absolute_uri(pokemon_entity.pokemon.image.url)
+#     add_pokemon(
+#         folium_map, pokemon_entity.lat,
+#         pokemon_entity.lon,
+#         image_url
+#     )
