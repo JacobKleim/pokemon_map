@@ -17,6 +17,18 @@ DEFAULT_IMAGE_URL = (
 )
 
 
+def get_evolution_data(request, evolution_pokemon):
+    if evolution_pokemon:
+        image_url = request.build_absolute_uri(evolution_pokemon.image.url)
+        return {
+            'img_url': image_url,
+            'title_ru': evolution_pokemon.title,
+            'pokemon_id': evolution_pokemon.id,
+        }
+    else:
+        return None
+
+
 def add_pokemon(folium_map, lat, lon, image_url=DEFAULT_IMAGE_URL):
     icon = folium.features.CustomIcon(
         image_url,
@@ -55,6 +67,8 @@ def show_pokemon(request, pokemon_id):
     pokemon_entity = PokemonEntity.objects.get(pokemon=pokemon)
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
     image_url = request.build_absolute_uri(pokemon_entity.pokemon.image.url)
+    previous_evolution_data = get_evolution_data(request, pokemon.previous_evolution)
+    next_evolution_data = get_evolution_data(request, pokemon.next_evolutions.first())
     pokemon_data = {
         'lat': pokemon_entity.lat,
         'lon': pokemon_entity.lon,
@@ -62,7 +76,9 @@ def show_pokemon(request, pokemon_id):
         'title_ru': pokemon.title,
         'title_en': pokemon.title_en,
         'title_jp': pokemon.title_jp,
-        'description': pokemon.description
+        'description': pokemon.description,
+        'previous_evolution': previous_evolution_data,
+        'next_evolution': next_evolution_data,
     }
     add_pokemon(
         folium_map, pokemon_data['lat'],
