@@ -1,6 +1,7 @@
-from django.db import models 
-
 from datetime import datetime
+
+from django.db import models
+
 
 class Pokemon(models.Model):
     title = models.CharField(verbose_name='Название на русском', 

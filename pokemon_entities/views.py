@@ -1,13 +1,10 @@
-import folium
 import json
 
-from django.http import HttpResponseNotFound
-from django.shortcuts import render, get_object_or_404
-
-from pokemon_entities.models import Pokemon, PokemonEntity
-
+import folium
+from django.shortcuts import render
 from django.utils.timezone import localtime
 
+from pokemon_entities.models import Pokemon, PokemonEntity
 
 MOSCOW_CENTER = [55.751244, 37.618423]
 DEFAULT_IMAGE_URL = (
