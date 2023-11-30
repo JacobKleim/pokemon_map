@@ -18,8 +18,7 @@ class Pokemon(models.Model):
                                            on_delete=models.SET_NULL)
     description = models.TextField(verbose_name='Описание', 
                                    blank=True, null=True)
-    image = models.ImageField(verbose_name='Изображение',
-                              blank=True, null=True)
+    image = models.ImageField(verbose_name='Изображение')
     class Meta:
         verbose_name = 'Покемон'
         verbose_name_plural = 'Покемоны'
