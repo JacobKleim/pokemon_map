@@ -20,6 +20,7 @@ class Pokemon(models.Model):
     description = models.TextField(verbose_name='Описание', 
                                    blank=True, null=True)
     image = models.ImageField(verbose_name='Изображение')
+    
     class Meta:
         verbose_name = 'Покемон'
         verbose_name_plural = 'Покемоны'
@@ -30,13 +31,12 @@ class Pokemon(models.Model):
 
 class PokemonEntity(models.Model):
     pokemon = models.ForeignKey(Pokemon, on_delete=models.CASCADE, 
-                                verbose_name='Покемон')
+                                verbose_name='Покемон',
+                                related_name='pokemon_entities')
     lat = models.FloatField(verbose_name='Широта')
     lon = models.FloatField(verbose_name='Долгота')
-    appeared_at = models.DateTimeField(default=datetime(2023, 1, 2), 
-                                       verbose_name='Появился в')
-    disappeared_at = models.DateTimeField(default=datetime(2023, 1, 2), 
-                                          verbose_name='Исчез в')
+    appeared_at = models.DateTimeField(verbose_name='Появился в')
+    disappeared_at = models.DateTimeField(verbose_name='Исчез в')
     level = models.IntegerField(blank=True, null=True, 
                                 verbose_name='Уровень')
     health = models.IntegerField(blank=True, null=True, 
@@ -51,5 +51,8 @@ class PokemonEntity(models.Model):
     class Meta:
         verbose_name = 'Экземпляр покемона'
         verbose_name_plural = 'Экземпляры покемона'
+
+    def __str__(self):
+        return f'{self.pokemon} {self.level} уровня, ID {self.id}'
     
     
